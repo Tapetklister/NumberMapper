@@ -7,10 +7,10 @@ public class Grid : MonoBehaviour {
 
     public int xSize, ySize;
     public Tile tilePrefab;
+    public Vector2 screenSize;
 
     Vector2 tileSize;
     Vector2[] tilePositions;
-    Vector2 screenSize;
     Tile[] tiles;
 
     private void Awake()
@@ -36,16 +36,16 @@ public class Grid : MonoBehaviour {
         }
 
         tilePositions = new Vector2[xSize * ySize];
-        tiles = new Tile[xSize * ySize];
-
-        for (int i = 0, x = 0; x < xSize; x++)
-        {
-            for (int y = 0; y < ySize; y++, i++)
-            {
-                tilePositions[i] = GenerateTilePosition(x, y, tileSize, screenSize);
-                AddTile(i, tilePositions[i], tileSize);
-            }
-        }
+        //tiles = new Tile[xSize * ySize];
+        //
+        //for (int i = 0, x = 0; x < xSize; x++)
+        //{
+        //    for (int y = 0; y < ySize; y++, i++)
+        //    {
+        //        tilePositions[i] = GenerateTilePosition(x, y, tileSize, screenSize);
+        //        AddTile(i, tilePositions[i], tileSize);
+        //    }
+        //}
 
         return true;
     }

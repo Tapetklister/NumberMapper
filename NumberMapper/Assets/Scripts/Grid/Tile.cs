@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour
 {
     public ETileType type;
 
-    internal void Init(Vector2 worldPosition, Vector2 tileSize, Transform parent)
+    public void Init(Vector2 worldPosition, Vector2 tileSize, Transform parent)
     {
         transform.parent = parent;
         transform.position = worldPosition;
