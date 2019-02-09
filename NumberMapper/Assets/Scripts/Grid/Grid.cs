@@ -1,14 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid : MonoBehaviour {
 
     public int xSize, ySize;
+    public Tile tilePrefab;
 
-    public Vector2 tileSize;
-    public Vector2[] tilePositions;
-    public Vector2 screenSize;
+    Vector2 tileSize;
+    Vector2[] tilePositions;
+    Vector2 screenSize;
+    Tile[] tiles;
 
     private void Awake()
     {
@@ -24,24 +27,33 @@ public class Grid : MonoBehaviour {
 
     public bool Generate(int xSize, int ySize)
     {
-        if (xSize <= 0 || ySize <= 0)
+        if (xSize <= 0 || ySize <= 0 ||
+            tilePrefab == null ||
+            screenSize == null ||
+            screenSize.x <= 0 || screenSize.y <= 0)
         {
             return false;
         }
 
-        tilePositions = new Vector2[(xSize + 1) * (ySize + 1)];
-        
+        tilePositions = new Vector2[xSize * ySize];
+        tiles = new Tile[xSize * ySize];
+
         for (int i = 0, x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++, i++)
             {
                 tilePositions[i] = GenerateTilePosition(x, y, tileSize, screenSize);
-                GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                obj.transform.position = tilePositions[i];
+                AddTile(i, tilePositions[i], tileSize);
             }
         }
 
         return true;
+    }
+
+    private void AddTile(int index, Vector2 worldPosition, Vector2 tileSize)
+    {
+        tiles[index] = Instantiate(tilePrefab);
+        tiles[index].Init(worldPosition, tileSize, transform);
     }
 
     Vector2 GenerateTilePosition(int x, int y, Vector2 tileSize, Vector2 screenSize)
