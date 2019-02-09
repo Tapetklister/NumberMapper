@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour {
     public Vector2 screenSize;
 
     Vector2 tileSize;
-    Vector2[] tilePositions;
+    Vector2[,] tilePositions;
     Tile[] tiles;
 
     private void Awake()
@@ -35,15 +35,15 @@ public class Grid : MonoBehaviour {
             return false;
         }
 
-        tilePositions = new Vector2[xSize * ySize];
+        tilePositions = new Vector2[xSize,ySize];
         tiles = new Tile[xSize * ySize];
         
         for (int i = 0, x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++, i++)
             {
-                tilePositions[i] = GenerateTilePosition(x, y, tileSize, screenSize);
-                AddTile(i, tilePositions[i], tileSize);
+                tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, screenSize);
+                AddTile(i, tilePositions[x,y], tileSize);
             }
         }
 
@@ -69,9 +69,10 @@ public class Grid : MonoBehaviour {
         }
 
         Gizmos.color = Color.yellow;
-        for(int i = 0; i < tilePositions.Length; i++)
+
+        foreach(Vector2 pos in tilePositions)
         {
-            Gizmos.DrawSphere(tilePositions[i], 0.1f);
+            Gizmos.DrawSphere(pos, 0.1f);
         }
     }
 
