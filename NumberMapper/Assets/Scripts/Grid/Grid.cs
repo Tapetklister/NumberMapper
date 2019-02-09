@@ -8,6 +8,7 @@ public class Grid : MonoBehaviour {
     public int xSize, ySize;
     public Tile tilePrefab;
     public Vector2 screenSize;
+    public Vector2 tileValueRange;
 
     Vector2 tileSize;
     Vector2[,] tilePositions;
@@ -53,7 +54,7 @@ public class Grid : MonoBehaviour {
     private void AddTile(int index, Vector2 worldPosition, Vector2 tileSize)
     {
         tiles[index] = Instantiate(tilePrefab);
-        tiles[index].Init(worldPosition, tileSize, transform);
+        tiles[index].Init(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y));
     }
 
     Vector2 GenerateTilePosition(int x, int y, Vector2 tileSize, Vector2 screenSize)
