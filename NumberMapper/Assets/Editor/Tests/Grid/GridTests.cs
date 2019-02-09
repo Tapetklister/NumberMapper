@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
+using TMPro;
 
 [TestFixture]
 public class GridTests
@@ -49,6 +50,13 @@ public class GridTests
         var tile = new GameObject("tile");
         tile.AddComponent<SpriteRenderer>();
         tile.AddComponent<Tile>();
+
+        var text = new GameObject("text");
+        text.transform.parent = tile.transform;
+        text.AddComponent<TextMeshPro>();
+
+        tile.GetComponent<Tile>().text = text.GetComponent<TextMeshPro>();
+
         tile.GetComponent<Tile>().Init(worldPosition, size, parent);
         return tile;
     }
