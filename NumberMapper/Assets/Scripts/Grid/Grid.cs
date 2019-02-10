@@ -7,7 +7,7 @@ public class Grid : MonoBehaviour {
 
     public int xSize, ySize;
     public Tile tilePrefab;
-    public Vector2 screenSize;
+    public Vector2 boardWorldSize;
     public Vector2 tileValueRange;
     public Vector2 tileSize;
 
@@ -22,8 +22,8 @@ public class Grid : MonoBehaviour {
 
     private void SetSize()
     {
-        screenSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2;
-        tileSize = new Vector2(screenSize.x / xSize, screenSize.y / ySize);
+        boardWorldSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2;
+        tileSize = new Vector2(boardWorldSize.x / xSize, boardWorldSize.y / ySize);
     }
 
     public void Generate(int xSize, int ySize)
@@ -38,12 +38,12 @@ public class Grid : MonoBehaviour {
             throw new Exception("No tile prefab set in Grid.cs");
         }
 
-        if (screenSize == null)
+        if (boardWorldSize == null)
         {
-            throw new Exception("Screen size not set in Grid.cs");
+            throw new Exception("Board world size not set in Grid.cs");
         }
 
-        if (screenSize.x <= 0 || screenSize.y <= 0)
+        if (boardWorldSize.x <= 0 || boardWorldSize.y <= 0)
         {
             throw new Exception("Screen size's X and Y values must be higher than 0");
         }
@@ -55,7 +55,7 @@ public class Grid : MonoBehaviour {
         {
             for (int y = 0; y < ySize; y++, i++)
             {
-                tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, screenSize);
+                tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);
                 AddTile(i, tilePositions[x,y], tileSize);
             }
         }

@@ -45,7 +45,7 @@ public class GridTests
         
         grid.AddComponent<Grid>();
         grid.GetComponent<Grid>().tilePrefab = tile.GetComponent<Tile>();
-        grid.GetComponent<Grid>().screenSize = new Vector2(6, 10);
+        grid.GetComponent<Grid>().boardWorldSize = new Vector2(6, 10);
         grid.GetComponent<Grid>().tileSize = tile.transform.localScale;
 
         return grid;
