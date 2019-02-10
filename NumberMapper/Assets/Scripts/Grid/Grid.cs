@@ -9,8 +9,8 @@ public class Grid : MonoBehaviour {
     public Tile tilePrefab;
     public Vector2 screenSize;
     public Vector2 tileValueRange;
+    public Vector2 tileSize;
 
-    Vector2 tileSize;
     Vector2[,] tilePositions;
     Tile[] tiles;
 
@@ -26,14 +26,26 @@ public class Grid : MonoBehaviour {
         tileSize = new Vector2(screenSize.x / xSize, screenSize.y / ySize);
     }
 
-    public bool Generate(int xSize, int ySize)
+    public void Generate(int xSize, int ySize)
     {
-        if (xSize <= 0 || ySize <= 0 ||
-            tilePrefab == null ||
-            screenSize == null ||
-            screenSize.x <= 0 || screenSize.y <= 0)
+        if (xSize <= 0.0f || ySize <= 0.0f)
         {
-            return false;
+            throw new Exception("Grid's X and Y size can't be less than 1");
+        }
+
+        if (tilePrefab == null)
+        {
+            throw new Exception("No tile prefab set in Grid.cs");
+        }
+
+        if (screenSize == null)
+        {
+            throw new Exception("Screen size not set in Grid.cs");
+        }
+
+        if (screenSize.x <= 0 || screenSize.y <= 0)
+        {
+            throw new Exception("Screen size's X and Y values must be higher than 0");
         }
 
         tilePositions = new Vector2[xSize,ySize];
@@ -47,14 +59,12 @@ public class Grid : MonoBehaviour {
                 AddTile(i, tilePositions[x,y], tileSize);
             }
         }
-
-        return true;
     }
 
     private void AddTile(int index, Vector2 worldPosition, Vector2 tileSize)
     {
         tiles[index] = Instantiate(tilePrefab);
-        tiles[index].Init(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y));
+        tiles[index].Initialize(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y));
     }
 
     Vector2 GenerateTilePosition(int x, int y, Vector2 tileSize, Vector2 screenSize)

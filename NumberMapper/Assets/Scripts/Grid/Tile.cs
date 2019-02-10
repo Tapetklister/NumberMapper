@@ -19,14 +19,27 @@ public class Tile : MonoBehaviour
         connected = new List<Tile>();
     }
 
-    public void Init(Vector2 worldPosition, Vector2 tileSize, Transform parent, int value = 0)
+    public void Initialize(Vector2 worldPosition, Vector2 tileSize, Transform parent, int value = 0)
     {
         transform.parent = parent;
         transform.position = worldPosition;
         transform.localScale = tileSize;
         Value = value;
 
-        text.text = value.ToString();
+
+        if (tileSize.x <= 0 || tileSize.y <= 0)
+        {
+            throw new Exception("Tile's X and Y size must be larger than 0, but now they are " + tileSize.x + "," + tileSize.y);
+        }
+
+        if (text != null)
+        {
+            text.text = value.ToString();
+        }
+        else
+        {
+            throw new Exception("Tile's text variable is not set.");
+        }
     }
 }
 
