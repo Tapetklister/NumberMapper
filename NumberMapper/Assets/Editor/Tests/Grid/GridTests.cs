@@ -54,7 +54,6 @@ public class GridTests
     private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, Transform parent)
     {
         var tile = new GameObject("tile");
-        tile.AddComponent<SpriteRenderer>();
         tile.AddComponent<Tile>();
 
         var text = new GameObject("text");
