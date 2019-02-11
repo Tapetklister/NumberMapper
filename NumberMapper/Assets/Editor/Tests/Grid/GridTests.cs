@@ -41,9 +41,19 @@ public class GridTests
     [TestCase(0, 0, 3, 3, 3)]
     public void CreatesStartTile_PositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
     {
-        Assert.DoesNotThrow(() => CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.Start));
+        GameObject tile = null;
+        Assert.DoesNotThrow(() => tile = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.Start));
+        Assert.That(tile.GetComponent<Tile>().type == ETileType.Start);
     }
-    
+
+    [TestCase(0, 0, 3, 3, 3)]
+    public void CreatesEndTile_PositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
+    {
+        GameObject tile = null;
+        Assert.DoesNotThrow(() => tile = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.End));
+        Assert.That(tile.GetComponent<Tile>().type == ETileType.End);
+    }
+
     GameObject SetupGenericGrid()
     {
         GameObject grid = new GameObject();

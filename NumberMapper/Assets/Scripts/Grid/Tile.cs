@@ -46,5 +46,6 @@ public class Tile : MonoBehaviour
 public enum ETileType
 {
     Base,
-    Start
+    Start,
+    End
 }
