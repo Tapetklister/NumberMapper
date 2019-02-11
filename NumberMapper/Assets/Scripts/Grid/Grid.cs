@@ -51,6 +51,7 @@ public class Grid : MonoBehaviour {
         tilePositions = new Vector2[xSize, ySize];
         tiles = new Tile[xSize * ySize];
         int startX = UnityEngine.Random.Range(0, xSize);
+        int endX = UnityEngine.Random.Range(0, xSize);
 
         for (int i = 0, x = 0; x < xSize; x++)
         {
@@ -61,6 +62,10 @@ public class Grid : MonoBehaviour {
                 if (x == startX && y == 0)
                 {
                     type = ETileType.Start;
+                }
+                else if (x == endX && y == ySize - 1)
+                {
+                    type = ETileType.End;
                 }
 
                 tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);

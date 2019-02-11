@@ -59,6 +59,9 @@ public class Tile : MonoBehaviour
             case ETileType.Start:
                 renderer.material.color = Color.red;
                 break;
+            case ETileType.End:
+                renderer.material.color = Color.green;
+                break;
             default:
                 break;
         }
