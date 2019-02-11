@@ -26,10 +26,10 @@ public class GridTests
         Assert.That(expected, Is.EqualTo(result.Message));
     }
     
-    [TestCase(0, 0, 3, 3)]
-    public void CreatesTile_PositiveSize_SuccessfullyCreatesTile(float posX, float posY, float sizeX, float sizeY)
+    [TestCase(0, 0, 3, 3, 3)]
+    public void CreatesTile_PositiveSize_SuccessfullyCreatesTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
     {
-        Assert.DoesNotThrow(() => CreateTile(posX, posY, sizeX, sizeY, null));
+        Assert.DoesNotThrow(() => CreateTile(posX, posY, sizeX, sizeY, sizeZ, null));
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class GridTests
     GameObject SetupGenericGrid()
     {
         GameObject grid = new GameObject();
-        GameObject tile = CreateTile(1, 1, 1, 1, grid.transform);
+        GameObject tile = CreateTile(1, 1, 1, 1, 1, grid.transform);
         
         grid.AddComponent<Grid>();
         grid.GetComponent<Grid>().tilePrefab = tile.GetComponent<Tile>();
@@ -51,7 +51,7 @@ public class GridTests
         return grid;
     }
     
-    private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, Transform parent)
+    private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, float sizeZ, Transform parent)
     {
         var tile = new GameObject("tile");
         tile.AddComponent<Tile>();
@@ -62,7 +62,7 @@ public class GridTests
 
         tile.GetComponent<Tile>().text = text.GetComponent<TextMeshPro>();
 
-        tile.GetComponent<Tile>().Initialize(new Vector2(posX, posY), new Vector2(sizeX, sizeY), parent);
+        tile.GetComponent<Tile>().Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent);
         return tile;
     }
 }
