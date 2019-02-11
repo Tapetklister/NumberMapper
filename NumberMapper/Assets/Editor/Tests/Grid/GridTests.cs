@@ -37,6 +37,12 @@ public class GridTests
     {
         Assert.DoesNotThrow(() => SetupGenericGrid());
     }
+
+    [TestCase(0, 0, 3, 3, 3)]
+    public void CreatesStartTile_PositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
+    {
+        Assert.DoesNotThrow(() => CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.Start));
+    }
     
     GameObject SetupGenericGrid()
     {
@@ -51,7 +57,7 @@ public class GridTests
         return grid;
     }
     
-    private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, float sizeZ, Transform parent)
+    private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, float sizeZ, Transform parent, ETileType type = ETileType.Base)
     {
         var tile = new GameObject("tile");
         tile.AddComponent<Tile>();
@@ -62,7 +68,7 @@ public class GridTests
 
         tile.GetComponent<Tile>().text = text.GetComponent<TextMeshPro>();
 
-        tile.GetComponent<Tile>().Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent);
+        tile.GetComponent<Tile>().Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0, type);
         return tile;
     }
 }
