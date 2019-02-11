@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
         connected = new List<Tile>();
     }
 
-    public void Initialize(Vector2 worldPosition, Vector2 tileSize, Transform parent, int value = 0)
+    public void Initialize(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0)
     {
         transform.parent = parent;
         transform.position = worldPosition;
@@ -27,9 +27,9 @@ public class Tile : MonoBehaviour
         Value = value;
 
 
-        if (tileSize.x <= 0 || tileSize.y <= 0)
+        if (tileSize.x <= 0 || tileSize.y <= 0 || tileSize.z <= 0)
         {
-            throw new Exception("Tile's X and Y size must be larger than 0, but now they are " + tileSize.x + "," + tileSize.y);
+            throw new Exception("Tile's X, Y and Z size must be larger than 0, but now they are " + tileSize.x + "," + tileSize.y);
         }
 
         if (text != null)

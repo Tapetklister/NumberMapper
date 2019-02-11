@@ -9,7 +9,7 @@ public class Grid : MonoBehaviour {
     public Tile tilePrefab;
     public Vector2 boardWorldSize;
     public Vector2 tileValueRange;
-    public Vector2 tileSize;
+    public Vector3 tileSize;
 
     Vector2[,] tilePositions;
     Tile[] tiles;
@@ -23,7 +23,7 @@ public class Grid : MonoBehaviour {
     private void SetSize()
     {
         boardWorldSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2;
-        tileSize = new Vector2(boardWorldSize.x / xSize, boardWorldSize.y / ySize);
+        tileSize = new Vector3(boardWorldSize.x / xSize, boardWorldSize.y / ySize, 1.0f);
     }
 
     public void Generate(int xSize, int ySize)
@@ -61,15 +61,15 @@ public class Grid : MonoBehaviour {
         }
     }
 
-    private void AddTile(int index, Vector2 worldPosition, Vector2 tileSize)
+    private void AddTile(int index, Vector2 worldPosition, Vector3 tileSize)
     {
         tiles[index] = Instantiate(tilePrefab);
         tiles[index].Initialize(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y));
     }
 
-    Vector2 GenerateTilePosition(int x, int y, Vector2 tileSize, Vector2 screenSize)
+    Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)
     {
-        return new Vector2(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f);
+        return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
     }
 
     private void OnDrawGizmos()
