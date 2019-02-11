@@ -12,6 +12,7 @@ public class Tile : MonoBehaviour
 
     public TextMeshPro text;
     public MeshRenderer renderer;
+    public Animator animator;
 
     List<Tile> connected;
 
@@ -43,6 +44,25 @@ public class Tile : MonoBehaviour
         }
 
         SetColor(type);
+    }
+
+    private void OnMouseDown()
+    {
+        Value++;
+
+        if (text != null)
+        {
+            Invoke("UpdateValueLabel", 0.3f);
+        }
+        if (animator != null)
+        {
+            animator.SetTrigger("Clicked");
+        }
+    }
+
+    void UpdateValueLabel()
+    {
+        text.text = Value.ToString();
     }
 
     void SetColor(ETileType type)

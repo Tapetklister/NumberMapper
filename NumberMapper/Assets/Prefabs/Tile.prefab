@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4672165748473200}
   - component: {fileID: 33856428905249520}
   - component: {fileID: 23320509100969240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Brick 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,8 +37,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4664793106889200}
   - component: {fileID: 114013910268704124}
-  m_Layer: 0
-  m_Name: Tile 1
+  - component: {fileID: 65794778019320322}
+  - component: {fileID: 95652995437919366}
+  m_Layer: 8
+  m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +58,7 @@ GameObject:
   - component: {fileID: 23098137348714064}
   - component: {fileID: 222772553263524128}
   - component: {fileID: 114882911918988778}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,6 +177,36 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1752690647284800}
   m_Mesh: {fileID: 0}
+--- !u!65 &65794778019320322
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1418210951932994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &95652995437919366
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1418210951932994}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2ea53b8a01c67c14b8ddf5219854836b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114013910268704124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -189,6 +221,7 @@ MonoBehaviour:
   type: 0
   text: {fileID: 114882911918988778}
   renderer: {fileID: 23320509100969240}
+  animator: {fileID: 95652995437919366}
 --- !u!114 &114882911918988778
 MonoBehaviour:
   m_ObjectHideFlags: 1
