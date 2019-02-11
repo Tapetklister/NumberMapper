@@ -50,6 +50,11 @@ public class Tile : MonoBehaviour
     {
         Value++;
 
+        if (Value > 9)
+        {
+            Value = 0;
+        }
+
         if (text != null)
         {
             Invoke("UpdateValueLabel", 0.3f);
