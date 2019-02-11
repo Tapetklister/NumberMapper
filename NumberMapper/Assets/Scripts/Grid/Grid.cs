@@ -48,23 +48,31 @@ public class Grid : MonoBehaviour {
             throw new Exception("Screen size's X and Y values must be higher than 0");
         }
 
-        tilePositions = new Vector2[xSize,ySize];
+        tilePositions = new Vector2[xSize, ySize];
         tiles = new Tile[xSize * ySize];
-        
+        int startX = UnityEngine.Random.Range(0, xSize);
+
         for (int i = 0, x = 0; x < xSize; x++)
         {
             for (int y = 0; y < ySize; y++, i++)
             {
+                var type = ETileType.Base;
+
+                if (x == startX && y == 0)
+                {
+                    type = ETileType.Start;
+                }
+
                 tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);
-                AddTile(i, tilePositions[x,y], tileSize);
+                AddTile(i, tilePositions[x,y], tileSize, type);
             }
         }
     }
 
-    private void AddTile(int index, Vector2 worldPosition, Vector3 tileSize)
+    private void AddTile(int index, Vector2 worldPosition, Vector3 tileSize, ETileType type)
     {
         tiles[index] = Instantiate(tilePrefab);
-        tiles[index].Initialize(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y));
+        tiles[index].Initialize(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), type);
     }
 
     Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)

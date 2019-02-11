@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   text: {fileID: 114882911918988778}
+  renderer: {fileID: 23320509100969240}
 --- !u!114 &114882911918988778
 MonoBehaviour:
   m_ObjectHideFlags: 1

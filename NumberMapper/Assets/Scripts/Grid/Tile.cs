@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour
     public int Value { get; set; }
 
     public TextMeshPro text;
+    public MeshRenderer renderer;
 
     List<Tile> connected;
 
@@ -39,6 +40,27 @@ public class Tile : MonoBehaviour
         else
         {
             throw new Exception("Tile's text variable is not set.");
+        }
+
+        SetColor(type);
+    }
+
+    void SetColor(ETileType type)
+    {
+        if (renderer == null)
+        {
+            return;
+        }
+
+        switch(type)
+        {
+            case ETileType.Base:
+                break;
+            case ETileType.Start:
+                renderer.material.color = Color.red;
+                break;
+            default:
+                break;
         }
     }
 }
