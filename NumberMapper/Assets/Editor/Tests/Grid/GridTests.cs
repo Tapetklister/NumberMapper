@@ -54,31 +54,54 @@ public class GridTests
         Assert.That(tile.GetComponent<Tile>().type == ETileType.End);
     }
 
+    [Test]
+    public void TileFactory_CreateTile_ReturnsTile()
+    {
+        var factoryObj = CreateGameObjectWithComponents("factory", typeof(TileFactory));
+        var tilePrefabObj = CreateGameObjectWithComponents("tilePrefab", typeof(Tile));
+
+        var factory = factoryObj.GetComponent<TileFactory>();
+        factory.baseTilePrefab = tilePrefabObj.GetComponent<Tile>();
+        var tile = factory.CreateTile();
+
+        Assert.That(tile, Is.Not.Null);
+    }
+
+    GameObject CreateGameObjectWithComponents(string objectName, params Type[] types)
+    {
+        GameObject obj = new GameObject(objectName);
+
+        foreach(Type type in types)
+        {
+            obj.AddComponent(type);
+        }
+        return obj;
+    }
+
     GameObject SetupGenericGrid()
     {
-        GameObject grid = new GameObject();
+        var gridObj = CreateGameObjectWithComponents("grid", typeof(Grid));
+        var grid = gridObj.GetComponent<Grid>();
         GameObject tile = CreateTile(1, 1, 1, 1, 1, grid.transform);
         
-        grid.AddComponent<Grid>();
-        grid.GetComponent<Grid>().tilePrefab = tile.GetComponent<Tile>();
-        grid.GetComponent<Grid>().boardWorldSize = new Vector2(6, 10);
-        grid.GetComponent<Grid>().tileSize = tile.transform.localScale;
+        grid.tilePrefab = tile.GetComponent<Tile>();
+        grid.boardWorldSize = new Vector2(6, 10);
+        grid.tileSize = tile.transform.localScale;
 
-        return grid;
+        return gridObj;
     }
     
     private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, float sizeZ, Transform parent, ETileType type = ETileType.Base)
     {
-        var tile = new GameObject("tile");
-        tile.AddComponent<Tile>();
+        var tileObj = CreateGameObjectWithComponents("tile", typeof(Tile));
+        var textObj = CreateGameObjectWithComponents("text", typeof(TextMeshPro));
+        
+        textObj.transform.parent = tileObj.transform;
 
-        var text = new GameObject("text");
-        text.transform.parent = tile.transform;
-        text.AddComponent<TextMeshPro>();
+        var tile = tileObj.GetComponent<Tile>();
+        tile.text = textObj.GetComponent<TextMeshPro>();
 
-        tile.GetComponent<Tile>().text = text.GetComponent<TextMeshPro>();
-
-        tile.GetComponent<Tile>().Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0, type);
-        return tile;
+       tile.Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0, type);
+        return tileObj;
     }
 }

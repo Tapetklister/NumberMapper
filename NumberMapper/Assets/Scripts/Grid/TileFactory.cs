@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TileFactory : MonoBehaviour {
 
-    //[SerializeField] GameObject tilePrefab;
+    public Tile baseTilePrefab;
 
-    //public Tile CreateTile(Vector2 size, Sprite sprite, ETileType type)
-    //{
-        
-    //}
+    public Tile CreateTile()
+    {
+        return baseTilePrefab;
+    }
 }
