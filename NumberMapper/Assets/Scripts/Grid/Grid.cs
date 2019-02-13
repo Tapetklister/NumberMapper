@@ -100,7 +100,7 @@ public class Grid : MonoBehaviour
                 int checkX = tile.GridX + x;
                 int checkY = tile.GridY + y;
 
-                if (checkX >= 0 && checkX < boardWorldSize.x && checkY >= 0 && checkY < boardWorldSize.y)
+                if (checkX >= 0 && checkX < boardWorldSize.x - 1 && checkY >= 0 && checkY < boardWorldSize.y - 2)
                 {
                     neighbours.Add(tiles[checkX, checkY]);
                 }
