@@ -23,10 +23,10 @@ public class TileFactory : MonoBehaviour {
         }
     }
 
-    public Tile CreateAndInitializeTile(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0, ETileType type = ETileType.Base)
+    public Tile CreateAndInitializeTile(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0, int gridX = 0, int gridY = 0, ETileType type = ETileType.Base)
     {
         var tile = CreateTile(type);
-        tile.Initialize(worldPosition, tileSize, parent, value);
+        tile.Initialize(worldPosition, tileSize, parent, value, gridX, gridY);
         return tile;
     }
 }

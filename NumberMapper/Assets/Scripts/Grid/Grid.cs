@@ -13,7 +13,9 @@ public class Grid : MonoBehaviour
     [HideInInspector] public Vector3 tileSize;
 
     Vector2[,] tilePositions;
-    Tile[] tiles;
+    Tile[,] tiles;
+
+    List<Tile> highlightedTiles;
 
     private void Awake()
     {
@@ -45,7 +47,7 @@ public class Grid : MonoBehaviour
         }
 
         tilePositions = new Vector2[xSize, ySize];
-        tiles = new Tile[xSize * ySize];
+        tiles = new Tile[xSize, ySize];
         int startX = UnityEngine.Random.Range(0, xSize);
         int endX = UnityEngine.Random.Range(0, xSize);
 
@@ -65,7 +67,8 @@ public class Grid : MonoBehaviour
                 }
 
                 tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);
-                tiles[i] = tileFactory.CreateAndInitializeTile(tilePositions[x, y], tileSize, transform, (int)UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), type);
+                tiles[x,y] = tileFactory.CreateAndInitializeTile(tilePositions[x, y], tileSize, transform, (int)UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), x, y, type);
+                tiles[x, y].clickedEvent += HighlightNeighbouringTiles;
             }
         }
     }
@@ -73,5 +76,51 @@ public class Grid : MonoBehaviour
     Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)
     {
         return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
+    }
+
+    void HighlightNeighbouringTiles(Tile tile)
+    {
+        List<Tile> neighbours = GetNeighbours(tile);
+        highlightedTiles = neighbours;
+    }
+
+    List<Tile> GetNeighbours(Tile tile)
+    {
+        List<Tile> neighbours = new List<Tile>();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (Mathf.Abs(x) == Mathf.Abs(y))
+                {
+                    continue;
+                }
+
+                int checkX = tile.GridX + x;
+                int checkY = tile.GridY + y;
+
+                if (checkX >= 0 && checkX < boardWorldSize.x && checkY >= 0 && checkY < boardWorldSize.y)
+                {
+                    neighbours.Add(tiles[checkX, checkY]);
+                }
+            }
+        }
+
+        return neighbours;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (highlightedTiles == null)
+        {
+            return;
+        }
+
+        foreach(Tile t in highlightedTiles)
+        {
+            Gizmos.color = new Color(1.0f, 1.0f, 0.0f, 0.5f);
+            Gizmos.DrawCube(t.transform.position, new Vector3(1.0f, 1.0f, 1.0f));
+        }
     }
 }
