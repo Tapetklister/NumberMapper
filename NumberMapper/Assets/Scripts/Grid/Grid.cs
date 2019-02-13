@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
+    public TileFactory tileFactory;
     public int xSize, ySize;
-    public Tile tilePrefab;
-    public Vector2 boardWorldSize;
     public Vector2 tileValueRange;
-    public Vector3 tileSize;
+
+    [HideInInspector] public Vector2 boardWorldSize;
+    [HideInInspector] public Vector3 tileSize;
 
     Vector2[,] tilePositions;
     Tile[] tiles;
@@ -31,11 +32,6 @@ public class Grid : MonoBehaviour
         if (xSize <= 0.0f || ySize <= 0.0f)
         {
             throw new Exception("Grid's X and Y size can't be less than 1");
-        }
-
-        if (tilePrefab == null)
-        {
-            throw new Exception("No tile prefab set in Grid.cs");
         }
 
         if (boardWorldSize == null)
@@ -69,44 +65,13 @@ public class Grid : MonoBehaviour
                 }
 
                 tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);
-                AddTile(i, tilePositions[x,y], tileSize, type);
+                tiles[i] = tileFactory.CreateAndInitializeTile(tilePositions[x, y], tileSize, transform, (int)UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), type);
             }
         }
-    }
-
-    private void AddTile(int index, Vector2 worldPosition, Vector3 tileSize, ETileType type)
-    {
-        tiles[index] = Instantiate(tilePrefab);
-        tiles[index].Initialize(worldPosition, tileSize, transform, (int) UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), type);
     }
 
     Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)
     {
         return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
     }
-
-    private void OnDrawGizmos()
-    {
-        if (tilePositions == null)
-        {
-            return;
-        }
-
-        Gizmos.color = Color.yellow;
-
-        foreach(Vector2 pos in tilePositions)
-        {
-            Gizmos.DrawSphere(pos, 0.1f);
-        }
-    }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

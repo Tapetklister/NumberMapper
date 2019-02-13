@@ -62,7 +62,7 @@ public class GridTests
 
         var factory = factoryObj.GetComponent<TileFactory>();
         factory.baseTilePrefab = tilePrefabObj.GetComponent<Tile>();
-        var tile = factory.CreateTile();
+        var tile = factory.CreateTile(ETileType.Base);
 
         Assert.That(tile, Is.Not.Null);
     }
@@ -98,11 +98,10 @@ public class GridTests
     {
         var gridObj = CreateGameObjectWithComponents("grid", typeof(Grid));
         var grid = gridObj.GetComponent<Grid>();
-        GameObject tile = CreateTile(1, 1, 1, 1, 1, grid.transform);
-        
-        grid.tilePrefab = tile.GetComponent<Tile>();
+        grid.tileFactory = SetupGenericFactory();
+
         grid.boardWorldSize = new Vector2(6, 10);
-        grid.tileSize = tile.transform.localScale;
+        grid.tileSize = grid.tileFactory.baseTilePrefab.transform.localScale;
 
         return gridObj;
     }
@@ -112,12 +111,31 @@ public class GridTests
         var tileObj = CreateGameObjectWithComponents("tile", typeof(Tile));
         var textObj = CreateGameObjectWithComponents("text", typeof(TextMeshPro));
         
-        textObj.transform.parent = tileObj.transform;
+        textObj.transform.SetParent(tileObj.transform);
 
         var tile = tileObj.GetComponent<Tile>();
         tile.text = textObj.GetComponent<TextMeshPro>();
+        tile.type = type;
 
-       tile.Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0, type);
+       tile.Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0);
         return tileObj;
+    }
+
+    TileFactory SetupGenericFactory()
+    {
+        var baseTile = CreateTile(0, 0, 1, 1, 1, null, ETileType.Base).GetComponent<Tile>();
+        var startTile = CreateTile(0, 0, 1, 1, 1, null, ETileType.Start).GetComponent<Tile>();
+        var endTile = CreateTile(0, 0, 1, 1, 1, null, ETileType.End).GetComponent<Tile>();
+        
+        var factoryObj = CreateGameObjectWithComponents("factory", typeof(TileFactory));
+        var factory = factoryObj.GetComponent<TileFactory>();
+
+        factory.baseTilePrefab = baseTile;
+        factory.startTilePrefab = startTile;
+        factory.endTilePrefab = endTile;
+
+        return factory;
+
+
     }
 }

@@ -21,13 +21,16 @@ public class Tile : MonoBehaviour
         connected = new List<Tile>();
     }
 
-    public void Initialize(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0, ETileType type = ETileType.Base)
+    public void Initialize(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0)
     {
-        transform.parent = parent;
+        if (parent != null)
+        {
+            transform.parent = parent;
+        }
+        
         transform.position = worldPosition;
         transform.localScale = tileSize;
         Value = value;
-        this.type = type;
 
         if (tileSize.x <= 0 || tileSize.y <= 0 || tileSize.z <= 0)
         {
