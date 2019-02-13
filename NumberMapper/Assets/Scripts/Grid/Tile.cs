@@ -6,9 +6,14 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    public delegate void EventHandler(Tile tile);
+    public event EventHandler clickedEvent;
+
     public ETileType type;
 
     public int Value { get; set; }
+    public int GridX { get; set; }
+    public int GridY { get; set; }
 
     public TextMeshPro text;
     public MeshRenderer renderer;
@@ -21,7 +26,7 @@ public class Tile : MonoBehaviour
         connected = new List<Tile>();
     }
 
-    public void Initialize(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0)
+    public void Initialize(Vector2 worldPosition, Vector3 tileSize, Transform parent, int value = 0, int gridX = 0, int gridY = 0)
     {
         if (parent != null)
         {
@@ -31,6 +36,8 @@ public class Tile : MonoBehaviour
         transform.position = worldPosition;
         transform.localScale = tileSize;
         Value = value;
+        GridX = gridX;
+        GridY = gridY;
 
         if (tileSize.x <= 0 || tileSize.y <= 0 || tileSize.z <= 0)
         {
@@ -70,6 +77,10 @@ public class Tile : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("Clicked");
+        }
+        if (clickedEvent != null)
+        {
+            clickedEvent(this);
         }
     }
 
