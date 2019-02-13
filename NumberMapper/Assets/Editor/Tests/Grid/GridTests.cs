@@ -67,6 +67,22 @@ public class GridTests
         Assert.That(tile, Is.Not.Null);
     }
 
+    [TestCase(5, 104, 9)]
+    [TestCase(9, 15, 6)]
+    [TestCase(0, 10, 0)]
+    public void Tile_ClickedMultipleTimes_ScoreIsCorrect(int initialValue, int timesClicked, int expected)
+    {
+        var tileObj = CreateGameObjectWithComponents("tile", typeof(Tile));
+        var tile = tileObj.GetComponent<Tile>();
+
+        for (int i = initialValue; i < timesClicked; i++)
+        {
+            tile.Clicked();
+        }
+
+        Assert.That(tile.Value, Is.EqualTo(expected));
+    }
+
     GameObject CreateGameObjectWithComponents(string objectName, params Type[] types)
     {
         GameObject obj = new GameObject(objectName);

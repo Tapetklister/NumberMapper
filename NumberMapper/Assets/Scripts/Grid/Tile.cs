@@ -48,6 +48,11 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Clicked();
+    }
+
+    public void Clicked()
+    {
         Value++;
 
         if (Value > 9)
