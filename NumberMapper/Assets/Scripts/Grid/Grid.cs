@@ -18,6 +18,8 @@ public class Grid : MonoBehaviour
 
     List<Tile> path = new List<Tile>();
 
+    Tile startTile;
+
     private void Awake()
     {
         SetSize();
@@ -73,6 +75,7 @@ public class Grid : MonoBehaviour
                 
                 if (tiles[x,y].type == ETileType.Start)
                 {
+                    startTile = tiles[x, y];
                     path.Add(tiles[x, y]);
                 }
             }
@@ -84,30 +87,20 @@ public class Grid : MonoBehaviour
         return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
     }
 
-    void UpdatePath(Tile origTile)
+    void UpdatePath()
     {
-        StartCoroutine("FindPathDepthFirst", origTile);// FindPathDepthFirst(origTile));
-    }
-
-    IEnumerator FindPathDepthFirst(Tile origTile)
-    {
-        var visited = new HashSet<Tile>();
-        var frontier = new Stack<Tile>();
-        frontier.Push(path.First());
-
-        while (frontier.Count != 0)
+        path.Clear();
+        var localPath = new List<Tile>()
         {
-            var current = frontier.Pop();
-            visited.Add(current);
-            yield return current;
+            startTile
+        };
 
-            var neighbouringTiles = GetNeighbours(current).Where(n => !visited.Contains(n));
-            foreach(var tile in neighbouringTiles.Reverse())
-            {
-                frontier.Push(tile);
-            }
+        for (int i = 0; i < localPath.Count; ++i)
+        {
+            localPath.AddRange(GetConnectedNeighbours(localPath[i]));
         }
-        path = frontier.ToList();
+
+        path = localPath;
     }
 
     List<Tile> GetNeighbours(Tile tile)
@@ -126,7 +119,7 @@ public class Grid : MonoBehaviour
                 int checkX = tile.GridX + x;
                 int checkY = tile.GridY + y;
 
-                if (checkX >= 0 && checkX < boardWorldSize.x - 1 && checkY >= 0 && checkY < boardWorldSize.y - 2)
+                if (checkX >= 0 && checkX < xSize && checkY >= 0 && checkY < ySize)
                 {
                     neighbours.Add(tiles[checkX, checkY]);
                 }
@@ -138,7 +131,10 @@ public class Grid : MonoBehaviour
 
     List<Tile> GetConnectedNeighbours(Tile tile)
     {
-        return GetNeighbours(tile).Where(t => t.Value == tile.Value + 1).ToList();
+        return GetNeighbours(tile).Where(t => (t.Value == tile.Value + 1 ||
+                                               t.Value == 0 && tile.Value == 9)
+                                               && !path.Contains(t)
+                                        ).ToList();
     }
 
     private void OnDrawGizmos()

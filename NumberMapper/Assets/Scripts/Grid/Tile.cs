@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
-    public delegate void EventHandler(Tile tile);
+    public delegate void EventHandler();
     public event EventHandler clickedEvent;
 
     public ETileType type;
@@ -81,7 +81,7 @@ public class Tile : MonoBehaviour
         }
         if (clickedEvent != null)
         {
-            clickedEvent(this);
+            clickedEvent();
         }
     }
 
