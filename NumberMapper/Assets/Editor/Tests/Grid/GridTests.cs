@@ -114,7 +114,7 @@ public class GridTests
         textObj.transform.SetParent(tileObj.transform);
 
         var tile = tileObj.GetComponent<Tile>();
-        tile.text = textObj.GetComponent<TextMeshPro>();
+        //tile.text = textObj.GetComponent<TextMeshPro>();
         tile.type = type;
 
        tile.Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0);

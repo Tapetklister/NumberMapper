@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class Tile : MonoBehaviour
     public int GridX { get; set; }
     public int GridY { get; set; }
 
-    public TextMeshPro text;
+    public Image text;
     public MeshRenderer renderer;
     public Animator animator;
 
     List<Tile> connected;
+
+    public Sprite[] numbers;
 
     private void Awake()
     {
@@ -46,14 +49,12 @@ public class Tile : MonoBehaviour
 
         if (text != null)
         {
-            text.text = value.ToString();
+            text.sprite = numbers[value];
         }
         else
         {
             throw new Exception("Tile's text variable is not set.");
         }
-
-        SetColor(type);
     }
 
     private void OnMouseDown()
@@ -86,29 +87,7 @@ public class Tile : MonoBehaviour
 
     void UpdateValueLabel()
     {
-        text.text = Value.ToString();
-    }
-
-    void SetColor(ETileType type)
-    {
-        if (renderer == null)
-        {
-            return;
-        }
-
-        switch(type)
-        {
-            case ETileType.Base:
-                break;
-            case ETileType.Start:
-                renderer.material.color = Color.red;
-                break;
-            case ETileType.End:
-                renderer.material.color = Color.green;
-                break;
-            default:
-                break;
-        }
+        text.sprite = numbers[Value];
     }
 }
 
