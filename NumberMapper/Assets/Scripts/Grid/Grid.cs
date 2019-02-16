@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Grid : MonoBehaviour
@@ -15,7 +16,7 @@ public class Grid : MonoBehaviour
     Vector2[,] tilePositions;
     Tile[,] tiles;
 
-    List<Tile> highlightedTiles;
+    List<Tile> path = new List<Tile>();
 
     private void Awake()
     {
@@ -68,7 +69,12 @@ public class Grid : MonoBehaviour
 
                 tilePositions[x,y] = GenerateTilePosition(x, y, tileSize, boardWorldSize);
                 tiles[x,y] = tileFactory.CreateAndInitializeTile(tilePositions[x, y], tileSize, transform, (int)UnityEngine.Random.Range(tileValueRange.x, tileValueRange.y), x, y, type);
-                tiles[x, y].clickedEvent += HighlightNeighbouringTiles;
+                tiles[x, y].clickedEvent += UpdatePath;
+                
+                if (tiles[x,y].type == ETileType.Start)
+                {
+                    path.Add(tiles[x, y]);
+                }
             }
         }
     }
@@ -78,10 +84,30 @@ public class Grid : MonoBehaviour
         return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
     }
 
-    void HighlightNeighbouringTiles(Tile tile)
+    void UpdatePath(Tile origTile)
     {
-        List<Tile> neighbours = GetNeighbours(tile);
-        highlightedTiles = neighbours;
+        StartCoroutine("FindPathDepthFirst", origTile);// FindPathDepthFirst(origTile));
+    }
+
+    IEnumerator FindPathDepthFirst(Tile origTile)
+    {
+        var visited = new HashSet<Tile>();
+        var frontier = new Stack<Tile>();
+        frontier.Push(path.First());
+
+        while (frontier.Count != 0)
+        {
+            var current = frontier.Pop();
+            visited.Add(current);
+            yield return current;
+
+            var neighbouringTiles = GetNeighbours(current).Where(n => !visited.Contains(n));
+            foreach(var tile in neighbouringTiles.Reverse())
+            {
+                frontier.Push(tile);
+            }
+        }
+        path = frontier.ToList();
     }
 
     List<Tile> GetNeighbours(Tile tile)
@@ -110,14 +136,19 @@ public class Grid : MonoBehaviour
         return neighbours;
     }
 
+    List<Tile> GetConnectedNeighbours(Tile tile)
+    {
+        return GetNeighbours(tile).Where(t => t.Value == tile.Value + 1).ToList();
+    }
+
     private void OnDrawGizmos()
     {
-        if (highlightedTiles == null)
+        if (path == null)
         {
             return;
         }
 
-        foreach(Tile t in highlightedTiles)
+        foreach(Tile t in path)
         {
             Gizmos.color = new Color(1.0f, 1.0f, 0.0f, 0.5f);
             Gizmos.DrawCube(t.transform.position, new Vector3(1.0f, 1.0f, 1.0f));
