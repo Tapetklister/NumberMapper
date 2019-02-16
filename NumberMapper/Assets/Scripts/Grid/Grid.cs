@@ -24,6 +24,7 @@ public class Grid : MonoBehaviour
     {
         SetSize();
         Generate(xSize, ySize);
+        UpdatePath();
     }
 
     private void SetSize()
@@ -101,6 +102,15 @@ public class Grid : MonoBehaviour
         }
 
         path = localPath;
+
+        // Temporary path rendering -----
+
+        foreach(Tile t in path)
+        {
+            t.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+        }
+
+        //-------------------------------
     }
 
     List<Tile> GetNeighbours(Tile tile)

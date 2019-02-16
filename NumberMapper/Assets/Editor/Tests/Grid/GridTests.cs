@@ -4,6 +4,7 @@ using UnityEngine;
 using NUnit.Framework;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 [TestFixture]
 public class GridTests
@@ -109,12 +110,12 @@ public class GridTests
     private GameObject CreateTile(float posX, float posY, float sizeX, float sizeY, float sizeZ, Transform parent, ETileType type = ETileType.Base)
     {
         var tileObj = CreateGameObjectWithComponents("tile", typeof(Tile));
-        var textObj = CreateGameObjectWithComponents("text", typeof(TextMeshPro));
+        var textObj = CreateGameObjectWithComponents("text", typeof(Image));
         
         textObj.transform.SetParent(tileObj.transform);
 
         var tile = tileObj.GetComponent<Tile>();
-        //tile.text = textObj.GetComponent<TextMeshPro>();
+        tile.text = textObj.GetComponent<Image>();
         tile.type = type;
 
        tile.Initialize(new Vector2(posX, posY), new Vector3(sizeX, sizeY, sizeZ), parent, 0);

@@ -147,6 +147,7 @@ MonoBehaviour:
     type: 3}
   endTilePrefab: {fileID: 114174816046047256, guid: b9a7428bc70c61c4290b691350ad435c,
     type: 3}
+  numbers: []
 --- !u!4 &60644328
 Transform:
   m_ObjectHideFlags: 0

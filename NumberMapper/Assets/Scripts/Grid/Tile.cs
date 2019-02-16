@@ -22,8 +22,6 @@ public class Tile : MonoBehaviour
 
     List<Tile> connected;
 
-    public Sprite[] numbers;
-
     private void Awake()
     {
         connected = new List<Tile>();
@@ -49,7 +47,7 @@ public class Tile : MonoBehaviour
 
         if (text != null)
         {
-            text.sprite = numbers[value];
+            text.sprite = Resources.Load<Sprite>("Sprites/Number" + Value);
         }
         else
         {
@@ -87,7 +85,7 @@ public class Tile : MonoBehaviour
 
     void UpdateValueLabel()
     {
-        text.sprite = numbers[Value];
+        text.sprite = Resources.Load<Sprite>("Sprites/Number" + Value);
     }
 }
 
