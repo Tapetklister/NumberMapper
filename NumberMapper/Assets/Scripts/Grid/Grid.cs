@@ -20,11 +20,14 @@ public class Grid : MonoBehaviour
 
     Tile startTile;
 
+    public delegate void EndReached();
+    public static event EndReached OnEndReached;
+
     private void Awake()
     {
         SetSize();
-        Generate(xSize, ySize);
-        UpdatePath();
+        //Generate(xSize, ySize);
+        //UpdatePath();
     }
 
     private void SetSize()
@@ -81,6 +84,8 @@ public class Grid : MonoBehaviour
                 }
             }
         }
+
+        UpdatePath();
     }
 
     Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)
@@ -99,6 +104,12 @@ public class Grid : MonoBehaviour
         for (int i = 0; i < localPath.Count; ++i)
         {
             localPath.AddRange(GetConnectedNeighbours(localPath[i]));
+        }
+
+        if (localPath.Any(t => t.type == ETileType.End))
+        {
+            OnEndReached();
+            Clear();
         }
 
         path = localPath;
@@ -159,5 +170,10 @@ public class Grid : MonoBehaviour
             Gizmos.color = new Color(1.0f, 1.0f, 0.0f, 0.5f);
             Gizmos.DrawCube(t.transform.position, new Vector3(1.0f, 1.0f, 1.0f));
         }
+    }
+
+    private void OnEnable()
+    {
+        Awake();
     }
 }
