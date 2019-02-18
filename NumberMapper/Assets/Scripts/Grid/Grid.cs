@@ -109,7 +109,6 @@ public class Grid : MonoBehaviour
         if (localPath.Any(t => t.type == ETileType.End))
         {
             OnEndReached();
-            Clear();
         }
 
         path = localPath;
