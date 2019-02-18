@@ -8,8 +8,6 @@ public class TileFactory : MonoBehaviour {
     public Tile startTilePrefab;
     public Tile endTilePrefab;
 
-    public Sprite[] numbers;
-
     public Tile CreateTile(ETileType type = ETileType.Base)
     {
         switch (type)

@@ -17,7 +17,6 @@ public class Tile : MonoBehaviour
     public int GridY { get; set; }
 
     public Image text;
-    public MeshRenderer renderer;
     public Animator animator;
 
     List<Tile> connected;
@@ -42,7 +41,7 @@ public class Tile : MonoBehaviour
 
         if (tileSize.x <= 0 || tileSize.y <= 0 || tileSize.z <= 0)
         {
-            throw new Exception("Tile's X, Y and Z size must be larger than 0, but now they are " + tileSize.x + "," + tileSize.y);
+            throw new Exception("Tile's X, Y and Z size must be larger than 0, but now they are " + tileSize.x + "," + tileSize.y + "," + tileSize.z);
         }
 
         if (text != null)

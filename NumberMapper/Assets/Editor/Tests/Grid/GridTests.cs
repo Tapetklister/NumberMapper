@@ -20,7 +20,7 @@ public class GridTests
     [TestCase(-3, 4, "Grid's X and Y size can't be less than 1")]
     [TestCase(0, 0, "Grid's X and Y size can't be less than 1")]
     [TestCase(0, 12, "Grid's X and Y size can't be less than 1")]
-    public void GeneratesGrid_NegativeNumbers_FailsToCreateGrid(int x, int y, string expected)
+    public void GeneratesGrid_WithNegativeSizeVariables_FailsToCreateGrid(int x, int y, string expected)
     {
         GameObject grid = SetupGenericGrid();
         var result = Assert.Throws<Exception>(() => grid.GetComponent<Grid>().Generate(x,y));
@@ -28,9 +28,16 @@ public class GridTests
     }
     
     [TestCase(0, 0, 3, 3, 3)]
-    public void CreatesTile_PositiveSize_SuccessfullyCreatesTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
+    public void TileFactory_TriesToCreateBaseTileWithPositiveSize_SuccessfullyCreatesBaseTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
     {
         Assert.DoesNotThrow(() => CreateTile(posX, posY, sizeX, sizeY, sizeZ, null));
+    }
+
+    [TestCase(0,0,-3,-3,-3, "Tile's X, Y and Z size must be larger than 0, but now they are -3,-3,-3")]
+    public void TileFactoriy_TriesToCreateEndTileWithNegativeSize_FailsToCreateEndTile(float posX, float posY, float sizeX, float sizeZ, float sizeY, string expected)
+    {
+        var result = Assert.Throws<Exception>(() => CreateTile(posX, posY, sizeX, sizeZ, sizeY, null));
+        Assert.That(expected, Is.EqualTo(result.Message));
     }
 
     [Test]
@@ -40,19 +47,27 @@ public class GridTests
     }
 
     [TestCase(0, 0, 3, 3, 3)]
-    public void CreatesStartTile_PositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
+    public void TileFactory_TriesCreateStartTileWithPositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
     {
-        GameObject tile = null;
-        Assert.DoesNotThrow(() => tile = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.Start));
-        Assert.That(tile.GetComponent<Tile>().type == ETileType.Start);
+        GameObject tileObj = null;
+        Assert.DoesNotThrow(() => tileObj = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.Start));
+        var tile = tileObj.GetComponent<Tile>();
+
+        Assert.That(tile.type == ETileType.Start);
+        Assert.That(tile.text.sprite != null);
+        Assert.That(tile.Value >= 0 && tile.GetComponent<Tile>().Value <= 9);
     }
 
     [TestCase(0, 0, 3, 3, 3)]
-    public void CreatesEndTile_PositiveSize_SuccessfullyCreatesStartTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
+    public void TileFactory_TriesCreateEndTileWithPositiveSize_SuccessfullyCreatesEndTile(float posX, float posY, float sizeX, float sizeZ, float sizeY)
     {
-        GameObject tile = null;
-        Assert.DoesNotThrow(() => tile = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.End));
-        Assert.That(tile.GetComponent<Tile>().type == ETileType.End);
+        GameObject tileObj = null;
+        Assert.DoesNotThrow(() => tileObj = CreateTile(posX, posY, sizeX, sizeY, sizeZ, null, ETileType.End));
+        var tile = tileObj.GetComponent<Tile>();
+
+        Assert.That(tile.type == ETileType.End);
+        Assert.That(tile.text.sprite != null);
+        Assert.That(tile.Value >= 0 && tile.Value <= 9);
     }
 
     [Test]
