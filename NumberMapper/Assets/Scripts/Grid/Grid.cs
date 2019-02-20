@@ -95,6 +95,7 @@ public class Grid : MonoBehaviour
 
     void UpdatePath()
     {
+        var oldPath = path;
         path.Clear();
         var localPath = new List<Tile>()
         {
@@ -103,6 +104,11 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < localPath.Count; ++i)
         {
+            var newEntries = GetConnectedNeighbours(localPath[i]);
+            foreach(var t in newEntries)
+            {
+                t.SetColors(true);
+            }
             localPath.AddRange(GetConnectedNeighbours(localPath[i]));
         }
 
@@ -111,16 +117,21 @@ public class Grid : MonoBehaviour
             OnEndReached();
         }
 
-        path = localPath;
+        var removedFromPath = oldPath.Where(t => !localPath.Contains(t)).ToList();
 
-        // Temporary path rendering -----
-
-        foreach(Tile t in path)
+        foreach(var t in removedFromPath)
         {
-            t.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+            t.SetColors(false);
         }
 
-        //-------------------------------
+        path = localPath;
+
+        var debugLog = "";
+        foreach (var t in path)
+        {
+            debugLog += "{" + t.GridX + "," + t.GridY + "}";
+        }
+        Debug.Log(debugLog);
     }
 
     List<Tile> GetNeighbours(Tile tile)
@@ -153,22 +164,7 @@ public class Grid : MonoBehaviour
     {
         return GetNeighbours(tile).Where(t => (t.Value == tile.Value + 1 ||
                                                t.Value == 0 && tile.Value == 9)
-                                               && !path.Contains(t)
-                                        ).ToList();
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (path == null)
-        {
-            return;
-        }
-
-        foreach(Tile t in path)
-        {
-            Gizmos.color = new Color(1.0f, 1.0f, 0.0f, 0.5f);
-            Gizmos.DrawCube(t.transform.position, new Vector3(1.0f, 1.0f, 1.0f));
-        }
+                                               && !path.Contains(t)).ToList();
     }
 
     private void OnEnable()

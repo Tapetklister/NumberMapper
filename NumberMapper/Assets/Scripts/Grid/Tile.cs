@@ -86,6 +86,11 @@ public class Tile : MonoBehaviour
     {
         text.sprite = Resources.Load<Sprite>("Sprites/Number" + Value);
     }
+
+    public void SetColors(bool connected)
+    {
+        text.color = connected ? Color.yellow : Color.white;
+    }
 }
 
 public enum ETileType
