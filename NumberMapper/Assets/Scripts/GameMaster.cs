@@ -10,12 +10,16 @@ public class GameMaster : MonoBehaviour
     [SerializeField]
     Menu menu;
 
+    [SerializeField]
+    Scorekeeper scorekeeper;
+
     private void Awake()
     {
         menu.singleplayerButton.onClick.AddListener(StartGame);
         menu.restartButton.onClick.AddListener(StartGame);
         menu.mainMenuButton.onClick.AddListener(menu.ShowMainMenu);
         Grid.OnEndReached += menu.ShowFinishMenu;
+        Tile.OnStaticClickedEvent += scorekeeper.IncrementScore;
     }
 
     void StartGame()

@@ -10,11 +10,17 @@ public class Grid : MonoBehaviour
     public int xSize, ySize;
     public Vector2 tileValueRange;
 
+    public Canvas boardCanvas;
+
     [HideInInspector] public Vector2 boardWorldSize;
     [HideInInspector] public Vector3 tileSize;
 
     Vector2[,] tilePositions;
     Tile[,] tiles;
+
+    Vector3 origo;
+
+    public int leftPadding, topPadding, rightPadding, bottomPadding;
 
     List<Tile> path = new List<Tile>();
 
@@ -30,9 +36,15 @@ public class Grid : MonoBehaviour
         //UpdatePath();
     }
 
+    private void OnEnable()
+    {
+        Awake();
+    }
+
     private void SetSize()
     {
-        boardWorldSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)) * 2;
+        origo = new Vector3(leftPadding - rightPadding, topPadding - bottomPadding, 0.0f);
+        boardWorldSize = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width - (leftPadding + rightPadding), Screen.height - (topPadding + bottomPadding))) * 2;
         tileSize = new Vector3(boardWorldSize.x / xSize, boardWorldSize.y / ySize, 1.0f);
     }
 
@@ -88,9 +100,9 @@ public class Grid : MonoBehaviour
         UpdatePath();
     }
 
-    Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 screenSize)
+    Vector3 GenerateTilePosition(int x, int y, Vector3 tileSize, Vector2 boardWorldSize)
     {
-        return new Vector3(tileSize.x * x - screenSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - screenSize.y * 0.5f + tileSize.y * 0.5f, 0);
+        return new Vector3(tileSize.x * x - boardWorldSize.x * 0.5f + tileSize.x * 0.5f, tileSize.y * y - boardWorldSize.y * 0.5f + tileSize.y * 0.5f, 0);
     }
 
     void UpdatePath()
@@ -121,7 +133,10 @@ public class Grid : MonoBehaviour
 
         if (localPath.Any(t => t.type == ETileType.End))
         {
-            OnEndReached();
+            if (OnEndReached != null)
+            {
+                OnEndReached();
+            }
         }
 
         //var removedFromPath = oldPath.Where(t => !localPath.Contains(t)).ToList();
@@ -171,10 +186,5 @@ public class Grid : MonoBehaviour
         return GetNeighbours(tile).Where(t => (t.Value == tile.Value + 1 ||
                                                t.Value == 0 && tile.Value == 9)
                                                && !path.Contains(t)).ToList();
-    }
-
-    private void OnEnable()
-    {
-        Awake();
     }
 }

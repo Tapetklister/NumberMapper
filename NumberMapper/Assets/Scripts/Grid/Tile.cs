@@ -9,6 +9,7 @@ public class Tile : MonoBehaviour
 {
     public delegate void EventHandler();
     public event EventHandler clickedEvent;
+    public static EventHandler OnStaticClickedEvent;
 
     public ETileType type;
 
@@ -79,6 +80,10 @@ public class Tile : MonoBehaviour
         if (clickedEvent != null)
         {
             clickedEvent();
+        }
+        if (OnStaticClickedEvent != null)
+        {
+            OnStaticClickedEvent();
         }
     }
 

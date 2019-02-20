@@ -1,8 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Scorekeeper : MonoBehaviour
 {
-    public static int score = 0;
+    [SerializeField]
+    TextMeshProUGUI text;
+    public int score = 0;
+
+    public void IncrementScore()
+    {
+        score++;
+        text.text = "Moves: " + score;
+    }
 }
