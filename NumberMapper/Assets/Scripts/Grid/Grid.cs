@@ -95,6 +95,13 @@ public class Grid : MonoBehaviour
 
     void UpdatePath()
     {
+        ////// I don't like this. Plz fix //////
+        foreach(var t in path)
+        {
+            t.SetColors(false);
+        }
+        ////////////////////////////////////////
+
         var oldPath = path;
         path.Clear();
         var localPath = new List<Tile>()
@@ -104,12 +111,12 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < localPath.Count; ++i)
         {
-            var newEntries = GetConnectedNeighbours(localPath[i]);
-            foreach(var t in newEntries)
-            {
-                t.SetColors(true);
-            }
-            localPath.AddRange(GetConnectedNeighbours(localPath[i]));
+            var newEntries = GetConnectedNeighbours(localPath, i);
+            //foreach(var t in newEntries)
+            //{
+            //    t.SetColors(true);
+            //}
+            localPath.AddRange(newEntries);
         }
 
         if (localPath.Any(t => t.type == ETileType.End))
@@ -117,21 +124,19 @@ public class Grid : MonoBehaviour
             OnEndReached();
         }
 
-        var removedFromPath = oldPath.Where(t => !localPath.Contains(t)).ToList();
+        //var removedFromPath = oldPath.Where(t => !localPath.Contains(t)).ToList();
 
-        foreach(var t in removedFromPath)
+        foreach (var t in localPath)
         {
-            t.SetColors(false);
+            t.SetColors(true);
         }
+
+        //foreach (var t in removedFromPath)
+        //{
+        //    t.SetColors(false);
+        //}
 
         path = localPath;
-
-        var debugLog = "";
-        foreach (var t in path)
-        {
-            debugLog += "{" + t.GridX + "," + t.GridY + "}";
-        }
-        Debug.Log(debugLog);
     }
 
     List<Tile> GetNeighbours(Tile tile)
@@ -160,8 +165,9 @@ public class Grid : MonoBehaviour
         return neighbours;
     }
 
-    List<Tile> GetConnectedNeighbours(Tile tile)
+    List<Tile> GetConnectedNeighbours(List<Tile> path, int index)
     {
+        var tile = path[index];
         return GetNeighbours(tile).Where(t => (t.Value == tile.Value + 1 ||
                                                t.Value == 0 && tile.Value == 9)
                                                && !path.Contains(t)).ToList();
