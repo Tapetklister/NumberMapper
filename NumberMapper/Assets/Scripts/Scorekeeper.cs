@@ -9,10 +9,21 @@ public class Scorekeeper : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI text;
     public int score = 0;
+    bool finished = false;
 
     public void IncrementScore()
     {
         score++;
-        text.text = "Moves: " + score;
+        if (!finished)
+        {
+            text.text = "Moves: " + score;
+        }
+    }
+
+    // temp
+    public void SetTextFinish()
+    {
+        text.text = "You finished in " + score + " moves";
+        finished = true;
     }
 }

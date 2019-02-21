@@ -8,7 +8,7 @@ public class GameMaster : MonoBehaviour
     Grid grid;
 
     [SerializeField]
-    Menu menu;
+    MainMenu menu;
 
     [SerializeField]
     Scorekeeper scorekeeper;
@@ -16,15 +16,15 @@ public class GameMaster : MonoBehaviour
     private void Awake()
     {
         menu.singleplayerButton.onClick.AddListener(StartGame);
-        menu.restartButton.onClick.AddListener(StartGame);
-        menu.mainMenuButton.onClick.AddListener(menu.ShowMainMenu);
-        Grid.OnEndReached += menu.ShowFinishMenu;
+        //menu.restartButton.onClick.AddListener(StartGame);
+        //menu.mainMenuButton.onClick.AddListener(menu.ShowMainMenu);
         Tile.OnStaticClickedEvent += scorekeeper.IncrementScore;
+        Grid.OnEndReached += scorekeeper.SetTextFinish;
     }
 
-    void StartGame()
+    public void StartGame()
     {
-        menu.Hide();
+        menu.gameObject.SetActive(false);
         grid.gameObject.SetActive(true);
         grid.Generate(grid.xSize, grid.ySize);
     }
